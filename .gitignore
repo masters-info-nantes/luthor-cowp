@@ -1,0 +1,5 @@
+basic/*
+*.bas
+*.cmo
+*.cmi
+*.ml
