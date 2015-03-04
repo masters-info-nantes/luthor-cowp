@@ -1,6 +1,5 @@
 %{
-  let texte = open_out "compiled.c"
-  let () = output_string texte "#include<stdio.h> \n\n"
+
 %}
 
 %token <string> STRING
@@ -9,17 +8,11 @@
 
 
 %start init
-%type <unit> init
-%type <unit> main
+%type <string> init
 %%
 
 
-
-main:
-  PRINT STRING {output_string texte "printf(";output_string texte $2;output_string texte ");\n"}
-  | PRINT STRING main{output_string texte "printf(";output_string texte $2;output_string texte ");\n"}
-;
-
 init:
-	main{}
+	EOF {""}
+	| PRINT STRING init{"printf(" ^ $2 ^ ");\n" ^ $3}
 ;

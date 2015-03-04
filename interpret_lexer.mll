@@ -6,7 +6,7 @@ let type  	= "int"|"double"|"String"
 let privacy = "private"|"public"|"protected"
 let integer  = ['0'-'9']+
 let number   = integer ('.' integer)?
-let string = '\"'_*'\"'
+let string = '\"'(_[^'\"'])* '\"'
 let identifier = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 rule token = parse
