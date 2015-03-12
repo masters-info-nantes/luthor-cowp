@@ -5,4 +5,7 @@ let () =
   if not (Sys.file_exists input_file)
     then print_endline "This file does not exist" else
   let lexbuf = Lexing.from_channel (open_in input_file) in
-  Interpret_parser.init Interpret_lexer.token lexbuf
+  try
+	Interpret_parser.init Interpret_lexer.token lexbuf
+  with
+      Error.SyntaxError e -> Error.print e
