@@ -9,10 +9,10 @@ let () =
     		let output_file = open_out Sys.argv.(2) in
   			let lexbuf = Lexing.from_channel (open_in input_file) in
   			try
-				Interpret_parser.init Interpret_lexer.token lexbuf
+				let contents = Interpret_parser.init Interpret_lexer.token lexbuf in
+				output_string output_file contents;
+				output_char output_file '\n';
+				close_out output_file
 			with
 				Error.SyntaxError e -> Error.print e
-  			let contents = Interpret_parser.init Interpret_lexer.token lexbuf in
-          	output_string output_file contents;
-          	output_char output_file '\n';
-          	close_out output_file
+          	
