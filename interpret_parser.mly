@@ -9,6 +9,7 @@
 %}
 
 %token <string> STRING
+%token TYPE_STRING
 %token DIM
 %token AS
 %token <string> PRIM_TYPE
@@ -24,5 +25,5 @@
 init:
 	EOF {""}
 	| PRINT STRING init{"printf(" ^ $2 ^ ");\n" ^ $3}
-	| DIM IDENTIFIER AS PRIM_TYPE init{$4 ^ " " ^ $2 ^ ";\n"}
+	| DIM IDENTIFIER AS TYPE_STRING init{"char* " ^ $2 ^ ";\n"}
 ;
