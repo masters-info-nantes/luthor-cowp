@@ -1,8 +1,6 @@
 {
 	open Interpret_parser
-	
-	  (* Open the lexing module to update lexbuf position. *)
-  open Lexing
+    open Lexing
   
 	let next_line (lexbuf: Lexing.lexbuf) =
 		let pos = lexbuf.lex_curr_p in
@@ -24,49 +22,46 @@
  
 }
 
-let type  	= "Integer"|"Double"|"String"
-let privacy = "private"|"public"|"protected"
 let integer  = ['0'-'9']+
 let number   = integer ('.' integer)?
 let string = '\"'(_[^'\"'])* '\"'
 let identifier = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 rule token = parse
-  | "/*" {comment lexbuf}
-  (* | "//"[^'\n']*'\n' {SINGLE_COM}
-  | integer as i {INTEGER i}
-  | number {NUMBER}
-  | type as i{PRIM_TYPE i}
-  | privacy {PRIVACY} *)
+  
   | "String" {incr_bol lexbuf 6; TYPE_STRING}
+  | "Integer" {incr_bol lexbuf 7; TYPE_INTEGER}
+  
+  | string as i{incr_bol_lxm lexbuf i ; STRING i}
+  | identifier as i{incr_bol_lxm lexbuf i ; IDENTIFIER i}
+  | integer as i {INTEGER i}
+  | number as i {NUMBER i}
+
   | "PRINT" {incr_bol lexbuf 4; PRINT}
   | "DIM" {incr_bol lexbuf 3; DIM}
   | "AS"	{incr_bol lexbuf 2; AS}
-  | string as i{incr_bol_lxm lexbuf i ; STRING i}
-  | identifier as i{incr_bol_lxm lexbuf i ; IDENTIFIER i}
-  (*| '(' {incr_bol lexbuf 1; BEGIN_PAR}
-  | ')' {incr_bol lexbuf 1; END_PAR}
-  | '{' {incr_bol lexbuf 1; BEGIN_CURL}
-  | '}' {incr_bol lexbuf 1; END_CURL}
-  | ';' {incr_bol lexbuf 1; SEMICOLON}
-  | '+' {incr_bol lexbuf 1; PLUS}
-  | '-' {incr_bol lexbuf 1; MINUS}
-  | '*' {incr_bol lexbuf 1; MUL}
-  | '/' {incr_bol lexbuf 1; DIV}
-  | '^' {incr_bol lexbuf 1; POW}
-  | '=' {incr_bol lexbuf 1; EQUAL}
-  | "class" {CLASS} *)
-
-  (* New line *)
+  
+  | "If"     { incr_bol lexbuf 2; IF }
+  | "Then"   { incr_bol lexbuf 4; THEN }
+  | "Else"   { incr_bol lexbuf 4; ELSE }  
+  | "End If" { incr_bol lexbuf 6; IFEND }  
+  | "For"    { incr_bol lexbuf 3; FOR } 
+  | "To"     { incr_bol lexbuf 2; TO } 
+  | "Next"   { incr_bol lexbuf 4; NEXT } 
+  | "While"  { incr_bol lexbuf 5; WHILE } 
+  | "Do"     { incr_bol lexbuf 2; DO } 
+  | "Loop"   { incr_bol lexbuf 4; LOOP } 
+  
+  | "=" { incr_bol lexbuf 1; EQUAL }
+  | "<" { incr_bol lexbuf 1; GTHAN }
+  | ">" { incr_bol lexbuf 1; LTHAN }
+  | "," { incr_bol lexbuf 1; COMMA } 
+  | "+" | "-" | "*" | "/" as lxm { incr_bol lexbuf 1; OPERATION (String.make 1 lxm) }
+  
   | '\r' | '\n' | "\r\n" {next_line lexbuf ; token lexbuf}
-  (* White space *)
   | ' ' | '\t' {incr_bol lexbuf 1 ; token lexbuf}
   
   | eof {EOF}
   (* Raise an exception with all unknown characters *)
   | _ as c {Error.warning ("Unrecognized character " ^ (string_of_char c)) lexbuf.lex_curr_p;incr_bol lexbuf 1 ;token lexbuf}
   
-and comment = parse
-  | "*/" {token lexbuf}
-  | _    {comment lexbuf}
-  | eof  {EOF}

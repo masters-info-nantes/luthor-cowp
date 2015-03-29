@@ -9,12 +9,32 @@
 %}
 
 %token <string> STRING
+%token <string> INTEGER
+%token <string> NUMBER
+%token <string> PRIM_TYPE
+%token <string> IDENTIFIER
 %token TYPE_STRING
+%token TYPE_INTEGER
+
 %token DIM
 %token AS
-%token <string> PRIM_TYPE
+%token IF 
+%token THEN 
+%token ELSE 
+%token IFEND 
+%token FOR
+%token TO
+%token NEXT
+%token WHILE
+%token DO
+%token LOOP
 %token PRINT
-%token <string> IDENTIFIER
+%token EQUAL
+%token GTHAN
+%token LTHAN
+
+%token COMMA
+%token <string> OPERATION
 %token EOF
 
 
