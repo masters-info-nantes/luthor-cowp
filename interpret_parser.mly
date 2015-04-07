@@ -1,11 +1,5 @@
 %{
-  let texte = open_out "compiled.c"
-  let () = output_string texte "#include<stdio.h> \n\n"
-
-    (** Overrides the default parse_error function. *)  
-    
-  let parse_error s = Error.warning "Parsing error" (symbol_start_pos ())
-
+    open Definitions
 %}
 
 %token <string> STRING
@@ -17,6 +11,7 @@
 %token TYPE_INTEGER
 
 %token DIM
+%token CONST
 %token AS
 %token IF 
 %token THEN 
@@ -29,12 +24,16 @@
 %token DO
 %token LOOP
 %token PRINT
+%token DEQUAL
 %token EQUAL
 %token GTHAN
 %token LTHAN
 
 %token COMMA
-%token <string> OPERATION
+%token PLUS
+%token LESS
+%token TIMES
+%token DIVIDE
 %token EOF
 
 
@@ -43,7 +42,37 @@
 %%
 
 init:
-	EOF {""}
-	| PRINT STRING init{"printf(" ^ $2 ^ ");\n" ^ $3}
-	| DIM IDENTIFIER AS TYPE_STRING init{"char* " ^ $2 ^ ";\n"}
+	expressions EOF {""}
+;
+
+expressions:
+    expressions expression {$2::$1}
+;
+
+expression:
+    | print{$1}
+    | affectation{$1}
+;
+
+print:
+    | PRINT STRING {"printf(" ^ $2 ^ ");\n"}
+;
+
+affectation:
+    | IDENTIFIER EQUAL NUMBER{$1 ^ " = " ^ $3}
+;
+
+comparator:
+	| DEQUAL { "==" }
+	| GTHAN { ">" }
+	| GTHAN EQUAL { ">=" }
+	| LTHAN { "<" }
+	| LTHAN EQUAL { "<=" }
+;
+
+operator:
+    | PLUS { "+" }
+    | LESS { "-" }
+    | TIMES { "*" }
+    | DIVIDE { "/" }
 ;

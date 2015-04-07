@@ -10,9 +10,10 @@ all:
 	$(CAMLYACC) interpret_parser.mly
 	$(CAMLC) -c interpret_parser.mli
 	$(CAMLC) -c error.ml
+	$(CAMLC) -c definitions.ml
 	$(CAMLC) -c interpret_parser.ml
 	$(CAMLC) -c interpret_lexer.ml
-	$(CAMLC) error.cmo interpret_lexer.cmo interpret_parser.cmo interpret.ml -o $(EXEC)
+	$(CAMLC) error.cmo definitions.cmo interpret_lexer.cmo interpret_parser.cmo interpret.ml -o $(EXEC)
 
 clean:
 	rm -f *.cm[iox] *.mli *~ .*~

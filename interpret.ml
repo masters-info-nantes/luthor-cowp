@@ -8,8 +8,9 @@ let () =
     	else
     		let output_file = open_out Sys.argv.(2) in
   			let lexbuf = Lexing.from_channel (open_in input_file) in
-				let contents = Interpret_parser.init Interpret_lexer.token lexbuf in
-				output_string output_file contents;
-				output_char output_file '\n';
-				close_out output_file
+				    let contents = Interpret_parser.init Interpret_lexer.token lexbuf in
+				    output_string output_file contents;
+				    output_char output_file '\n';
+				    close_out output_file
+
           	

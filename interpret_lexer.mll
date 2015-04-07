@@ -1,13 +1,15 @@
 {
 	open Interpret_parser
     open Lexing
+    open Error
+    
+    
   
-	let next_line (lexbuf: Lexing.lexbuf) =
-		let pos = lexbuf.lex_curr_p in
-		lexbuf.lex_curr_p <-
-		{ 	pos with pos_bol = lexbuf.lex_curr_pos;
-			pos_lnum = pos.pos_lnum + 1
-		}
+  (** Increments the lexing buffer line number counter.*)
+  let incr_line lexbuf =
+    let pos = lexbuf.lex_curr_p in
+    lexbuf.lex_curr_p <-
+      {pos with pos_lnum = pos.pos_lnum + 1; pos_bol = 0}
 
   (** Increments the lexing buffer line offset by the given length. *)
   let incr_bol lexbuf length =
@@ -40,6 +42,7 @@ rule token = parse
   | "PRINT" {incr_bol lexbuf 4; PRINT}
   | "DIM" {incr_bol lexbuf 3; DIM}
   | "AS"	{incr_bol lexbuf 2; AS}
+  | "CONST"	{incr_bol lexbuf 5; CONST}
   
   | "If"     { incr_bol lexbuf 2; IF }
   | "Then"   { incr_bol lexbuf 4; THEN }
@@ -52,16 +55,19 @@ rule token = parse
   | "Do"     { incr_bol lexbuf 2; DO } 
   | "Loop"   { incr_bol lexbuf 4; LOOP } 
   
+  | "==" { incr_bol lexbuf 1; DEQUAL }
   | "=" { incr_bol lexbuf 1; EQUAL }
   | "<" { incr_bol lexbuf 1; GTHAN }
   | ">" { incr_bol lexbuf 1; LTHAN }
   | "," { incr_bol lexbuf 1; COMMA } 
-  | "+" | "-" | "*" | "/" as lxm { incr_bol lexbuf 1; OPERATION (String.make 1 lxm) }
+  | "+" { incr_bol lexbuf 1; PLUS } 
+  | "-" { incr_bol lexbuf 1; LESS } 
+  | "*" { incr_bol lexbuf 1; TIMES } 
+  | "/" { incr_bol lexbuf 1; DIVIDE } 
   
-  | '\r' | '\n' | "\r\n" {next_line lexbuf ; token lexbuf}
+  | '\r' | '\n' | "\r\n" {incr_line lexbuf ; token lexbuf}
   | ' ' | '\t' {incr_bol lexbuf 1 ; token lexbuf}
   
   | eof {EOF}
-  (* Raise an exception with all unknown characters *)
-  | _ as c {Error.warning ("Unrecognized character " ^ (string_of_char c)) lexbuf.lex_curr_p;incr_bol lexbuf 1 ;token lexbuf}
+  | _ as c {Error.warning("Unrecognized character " ^ (string_of_char c)) lexbuf.lex_curr_p;incr_bol lexbuf 1 ;token lexbuf}
   
