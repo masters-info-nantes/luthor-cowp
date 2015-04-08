@@ -1,12 +1,10 @@
 open Lexing
 
-type syntax_exception = string * Lexing.position
+type arbuste_exception = string * Lexing.position
 
-exception SyntaxError of syntax_exception
+exception ArbusteError of arbuste_exception
 
-let error message pos = raise (SyntaxError (message, pos))
+let error message pos = raise (ArbusteError (message, pos))
 
 let print (m,p) =
-  Printf.eprintf "Error line %d character %d: %s \n" p.pos_lnum (p.pos_bol + 1) m
-
-let warning message pos = print (message, pos)
+  Printf.eprintf "Error line %d character %d: %s\n" p.pos_lnum (p.pos_bol + 1) m
