@@ -1,4 +1,4 @@
-EXEC = cat
+EXEC = b2c
 
 CAMLC = ocamlc
 CAMLLEX = ocamllex

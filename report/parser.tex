@@ -1,0 +1,28 @@
+\section{Les règles}
+
+\subsection{main}
+    La règle main est la première règle à être exécutée, c'est le point de départ. A la fin de cette dernière, donc à la fin du fichier (EOF), on pourra alors écrire la fin du fichier de sortie qui se compose simplement d'un return 0 et d'une accolade fermante.
+    
+\subsection{start}
+    La règle start est exécutée immédiatement après la règle main et c'est elle qui va pouvoir écrire le début du fichier de sortie, c'est à dire les inclusions de librairies et la fonction main en C.
+    
+\subsection{expressions}
+    La règle expressions est celle qui sera appellée la plus souvent et qui va servir à appeler toutes les règles selon le mot qui aura été scanné.
+    
+\subsection{loop}
+    La règle loop est, comme son nom l'indique, la règle qui gère toutes les boucles, les for et les while. Elle gère le début mais aussi la fin des boucles avec les mots clés NEXT et LOOP. Comme les FOR en FreeBASIC ne contiennent aucun prédicat compliqué, ils sont géré de manières plus simplifiés que les WHILE qui eux peuvent avoir des conditions plus complexes.
+    
+\subsection{condition}
+    Derrière la règle condition se cache la gestion des IF, ELSE IF et ELSE. Pour chaque condition (sauf ELSE), on vient vérifier la présence et la conformité du prédicat.
+
+\subsection{predicate}
+    La règle predicate vérifie si le prédicat effectue bien une comparaison entre un identifieur et un nombre, un string ou un autre identifieur.
+
+\subsection{print\_expr}
+    Pour écrire dans la console un texte ou le contenu d'une variable, on utilise la règle print\_expr. Les variables étant stockées dans une Hashmap, la règle est capable de savoir le type de la variable et ainsi de générer correctement le printf en découlant.
+    
+\subsection{definitions}
+    Lors de la déclaration d'une variable, en plus de traduire le langage, on stocke la variable et son type dans une Hashmap, ce qui nous permet soit de retrouver le type de cette variable plus tard, soit tout simplement de savoir si la variable a bien déjà été déclarée avant de l'utiliser.
+
+\subsection{initialisations}
+    Le but de la règle initialisation est de vérifier que l'on attribue bien soit une valeur brute à une variable, soit le résultat d'une opération.

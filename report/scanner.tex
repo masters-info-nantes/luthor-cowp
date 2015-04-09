@@ -1,28 +1,43 @@
 \section{Expressions Régulières}
 
-La plupart des expressions régulières pour scanner le langage FreeBASIC sont simplement les mots-clés complets du langage, mais certaines expressions régulières un peu plus complexes, le détail de leur fonctionnement est décrit ci-après:
 
-\subsection{identifier} 
+En plus d'avoir à reconnaitres les mots-clés du FreeBASIC, il nous a fallut créer des expressions régulières un peu plus complexes pour certaines données, le détail de leur composition est décrit ci-après:
+
+\subsection{Les identifieurs} 
+    L'expression régulière suivante:
     \begin{verbatim}
         ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
     \end{verbatim}
+    permet de trouver les identifieurs. Un identifieur est un nom de variable ou de fonction, il peut être composé d'autant de chiffres, de lettres et d'underscore que l'on veut, sauf pour le premier caractère qui ne peut pas être un chiffre.
     
-\subsection{string } 
+\subsection{Les chaines de caractères}
+    L'expression régulière suivante:
     \begin{verbatim}
         '"' [^'"']* '"'
     \end{verbatim}
+        permet de trouver une chaine de caractère qui est une suite d'autant de chiffres, lettres et caractères spéciaux possible mais qui doit obéir à deux règles:
+    \begin{itemize}
+    \item Doit commencer et se terminer par des doubles quotes
+    \item Ne doit pas contenir de double quote (sauf échappement)
+    \end{itemize}
     
-\subsection{integer } 
+\subsection{Les entiers}
+    L'expression régulière suivante:
     \begin{verbatim}
         ['0'-'9']+
     \end{verbatim}
+    est la plus simple et permet de sélectionner les entiers, contennants au minimum un chiffre.
     
-\subsection{number }
+\subsection{Les nombres}
+L'expression régulière suivante:
 \begin{verbatim}
     integer ('.' integer)?
 \end{verbatim}
-
-\subsection{operation  }
+    est dérivée de la RegExp précédente et permet de sélectionner les nombres à virgules.
+    
+\subsection{Les opérations}
+    L'expression régulière suivante:
     \begin{verbatim}
         ['0'-'9' '+' '-' '*' '/' '(' ')']+
     \end{verbatim}
+    permet de sélectionner toutes les opérations, une opérations se définissant comme une expressions contenant seulement des chiffres et des opérateurs.

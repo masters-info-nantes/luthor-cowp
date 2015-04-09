@@ -1,4 +1,4 @@
-Dans le cadre du module de Compilation, nous avons à réaliser un projet individuel ou en binôme.
+Dans le cadre du module de Compilation, nous avions à réaliser un projet individuel ou en binôme.
 
 \section{Objectifs}
 
@@ -12,7 +12,7 @@ Il est impossible dans le temps imparti de créer un compilateur exhaustif, le b
 \begin{itemize}
 
 \item Langage de programmation: OCaml
-\item Outils: OCamlLex et OcamlYacc
+\item Outils: OCamlLex et OCamlYacc
 \item Langage source: FreeBASIC
 \item Langage destination: C
 \item Le plus de règles possibles
@@ -21,24 +21,30 @@ Il est impossible dans le temps imparti de créer un compilateur exhaustif, le b
 \end{itemize}
 
 \section{Composition d'un compilateur}
-Un compilateur est composé de deux principales parties: Un analyseur lexical et un analyseur syntaxique. L'analyseur lexical permet de lire le flux d'entrée et de spécifier le lexique grâce à des expressions régulières. 
+Un compilateur est composé de deux principales parties: Un analyseur lexical et un analyseur syntaxique. 
+\\\\
+L'analyseur lexical permet de lire le flux d'entrée et de spécifier le lexique grâce à des expressions régulières. 
+Si un "mot" ne correspond à aucune des expressions régulières, une erreur lexicale est renvoyée. 
+\\\\
+Une fois qu'un mot du lexique est trouvé, le token correspondant est passé à l'analyseur syntaxique. L'analyseur syntaxique lui va analyser l'ordre dans lequel les tokens vont lui être passés. Tant que l'ordre correpond aux rêgles syntaxiques du langage source, la traduction vers le langage cible est effectué, sinon une erreur de syntaxe est renvoyée. 
 
-Si un "mot" ne correspont à aucune des expressions régulières, une erreur lexicale est renvoyée. Une fois qu'un mot du lexique est trouvé, le token correspondant est passé à l'analyseur syntaxique. L'analyseur syntaxique lui va analyser l'ordre dans lequel les tokens vont lui être passées. Tant que l'ordre correpond aux rêgles syntaxiques du langage source, la traduction vers le langage cible est effectué, sinon une erreur de syntaxe est renvoyée. 
-
-\section{Règles implémentées et ordre d'implémentation}
-
-Les différentes règles ont été implémentées une par une, voici l'ordre dans lequel est l'ont été:
+\section{Ordre d'implémentation des fonctionnalité}
+De nombreux soucis nous ont obligé à recommencer entièrement le projet à quelques jours du rendu, voilà pourquoi le planning suivant ne contient que l'ordre d'implémentation et pas les numéros des semaines.
+\\\\
+Les différentes fonctionnalités ont été implémentées une par une, voici l'ordre dans lequel est l'ont été:
+\\\\
 \begin{itemize}
-    \item EOF
-    \item EOL
-    \item PRINT
-    \item DIM AS STRING INTEGER
-    \item ERROR
-    \item IF THEN ELSE
-    \item FOR WHILE DO LOOP NEXT
-    \item OPERATOR
-    \item OPERATION
-    \item CONST
+    \item Reconnaissance de la fin du fichier
+    \item Reconnaissance de la fin des lignes
+    \item Gestion des PRINT
+    \item Gestion des types et des déclarations de variables
+    \item Gestion des erreurs syntaxiques
+    \item Gestion des conditions
+    \item Gestion des boucles
+    \item Gestion des opérateurs de comparaison
+    \item Implémentation de la Hastable des variables
+    \item Gestion des opérations
+    \item Gestion des constantes
 \end{itemize}
 
 
