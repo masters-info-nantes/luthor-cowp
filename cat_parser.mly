@@ -1,5 +1,6 @@
 %{
 	let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
+    
     open Definitions
 %}
 
@@ -35,9 +36,12 @@
  * the end of the file is reached, we just print a new line.
  */
 main:
-   expressions EOF {print_newline ()}
+    start expressions EOF {generate_footer()}
 ;
 
+start:
+    { generate_header() }
+;
 expressions:
     /* empty */ {}
   | expressions EOL {print_string "\n"}
