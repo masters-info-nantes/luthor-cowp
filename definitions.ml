@@ -1,3 +1,8 @@
+let file = open_out "output.c"
+
+let print_string str = 
+    output_string file str
+
 let my_hash : (string,string) Hashtbl.t = Hashtbl.create 2;;
 
 let add_var a b = Hashtbl.add my_hash a b;;
@@ -5,9 +10,9 @@ let add_var a b = Hashtbl.add my_hash a b;;
 let print_variable variable =
 	let vartype = Hashtbl.find my_hash variable in 
     match vartype with
-    | "Integer" -> print_string ("printf(\"%d\\n\" , " ^ variable ^ ")")
-    | "String" -> print_string ("printf(\"%s\\n\" , " ^ variable ^ ")")
-    | _ -> print_string ("printf(\""^ variable ^ "\")")
+    | "Integer" -> print_string ("printf(\"%d\\n\" , " ^ variable ^ ");")
+    | "String" -> print_string ("printf(\"%s\\n\" , " ^ variable ^ ");")
+    | _ -> print_string ("printf(\""^ variable ^ "\");")
 
 
 let generate_header () =

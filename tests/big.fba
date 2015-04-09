@@ -1,0 +1,43 @@
+Const max = 21
+Const password = "123456"
+Dim number As Integer
+number = 0
+
+Dim inPass As String
+inPass = "password"
+
+If number = max Then
+	Print "Number is max"
+End If
+
+If inPass = "mypass" Then
+	Print "Login success"
+Else
+	Print "Login failed"
+End If
+
+If inPass = password Then
+	Print "Login success"
+Else 
+	If inPass = "admin" Then
+		Print "Login success (admin mode)"
+	End If
+End If
+
+Do While number < max
+	Print "Incr number"
+	number = 2+2
+Loop
+
+Do 
+	Print "lol"
+Loop
+
+For number = 1 To 12
+	Print "ForLoop number"
+Next
+
+For newvar = 1 To 5
+	Print "ForLoop newvar"
+Next
+

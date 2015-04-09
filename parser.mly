@@ -3,7 +3,7 @@
     
     open Definitions
 %}
-
+%token <string> OPERATION
 %token <string> IDENTIFIER
 %token <string> NUMBER
 %token <string> COMPARATOR
@@ -15,6 +15,7 @@
 %token PRINT
 %token EOF
 %token DIM
+%token CONST
 %token IF
 %token DO
 %token LOOP
@@ -31,10 +32,6 @@
 %type <unit> main
 %%
 
-/*
- * A file is a list of characters ending with the end of file token. When
- * the end of the file is reached, we just print a new line.
- */
 main:
     start expressions EOF {generate_footer()}
 ;
@@ -45,10 +42,11 @@ start:
 expressions:
     /* empty */ {}
   | expressions EOL {print_string "\n"}
-  | expressions affectations{}
+  | expressions definitions{}
   | expressions print_expr{}
   | expressions condition{}
   | expressions loop{}
+  | expressions initialisations{}
 ;
 
 loop:
@@ -56,6 +54,8 @@ loop:
     | expressions NEXT { print_string "}"}
     | expressions DO WHILE IDENTIFIER EQUAL NUMBER{print_string "while(";print_string $4;print_string "==";print_string $6;print_string "){"}
     | expressions DO WHILE IDENTIFIER COMPARATOR NUMBER{print_string "while(";print_string $4;print_string $5;print_string $6;print_string "){"}
+        | expressions DO WHILE IDENTIFIER EQUAL IDENTIFIER{print_string "while(";print_string $4;print_string "==";print_string $6;print_string "){"}
+    | expressions DO WHILE IDENTIFIER COMPARATOR IDENTIFIER{print_string "while(";print_string $4;print_string $5;print_string $6;print_string "){"}
     | expressions DO { print_string "while(1){"}
     | expressions LOOP { print_string "}"}
 ;
@@ -64,6 +64,7 @@ condition:
 	| expressions IF predicate THEN{print_string "if(";print_string $3;print_string "){"}
 	| expressions END IF{ print_string "}"}
 	| expressions ELSE IF predicate THEN{print_string " }else if(";print_string $4; print_string "){ "}
+	| expressions ELSE {print_string " }else{ "}
 ;
 
 predicate:
@@ -81,7 +82,16 @@ print_expr:
   | expressions PRINT STRING {print_string "printf(" ;print_string $3;print_string ");"}
 ;
 
-affectations:
+definitions:
 	| expressions DIM IDENTIFIER AS TYPE_STRING {print_string "char* ";print_string $3;print_string ";"; add_var $3 "String"}
 	| expressions DIM IDENTIFIER AS TYPE_INTEGER {print_string "int ";print_string $3;print_string ";"; add_var $3 "Integer"}
+;
+
+initialisations:
+    | expressions CONST IDENTIFIER EQUAL STRING {print_string "const ";print_string $3;print_string "=" ;print_string $5; print_string ";"}
+	| expressions CONST IDENTIFIER EQUAL NUMBER {print_string "const ";print_string $3;print_string "=" ;print_string $5; print_string ";"}
+	| expressions CONST IDENTIFIER EQUAL OPERATION {print_string "const ";print_string $3;print_string "=";print_string $5; print_string ";"}
+	| expressions IDENTIFIER EQUAL STRING {print_string $2;print_string "=" ;print_string $4; print_string ";"}
+	| expressions IDENTIFIER EQUAL NUMBER {print_string $2;print_string "=" ;print_string $4; print_string ";"}
+	| expressions IDENTIFIER EQUAL OPERATION {print_string $2;print_string "=";print_string $4; print_string ";"}
 ;

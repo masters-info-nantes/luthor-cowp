@@ -1,0 +1,21 @@
+DIM toto AS String
+DIM tati AS Integer
+DIM tata AS Integer
+
+toto = "coucou"
+tata = 6
+tati = 10
+
+IF toto = "lol" THEN
+	PRINT toto
+END IF
+
+If tata > tati THEN
+	PRINT tata
+END IF
+
+IF tata = 6 THEN
+	PRINT "ok"
+ELSE IF tata = 7 THEN
+	PRINT "ko"
+END IF

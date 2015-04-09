@@ -1,10 +1,10 @@
 open Lexing
 
-type arbuste_exception = string * Lexing.position
+type luthor_exception = string * Lexing.position
 
-exception ArbusteError of arbuste_exception
+exception LuthorError of luthor_exception
 
-let error message pos = raise (ArbusteError (message, pos))
+let error message pos = raise (LuthorError (message, pos))
 
 let print (m,p) =
   Printf.eprintf "Error line %d character %d: %s\n" p.pos_lnum (p.pos_bol + 1) m

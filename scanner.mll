@@ -1,9 +1,6 @@
 {
- open Cat_parser
- 
-   (* Open the parser module for the tokens declarations. *)
-  open Cat_parser
-  (* Open the lexing module to update lexbuf position. *)
+
+  open Parser
   open Lexing
   
   (** Increments the lexing buffer line number counter.*)
@@ -29,9 +26,11 @@ let identifier  = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let string      = '"' [^'"']* '"'
 let integer     = ['0'-'9']+
 let number      = integer ('.' integer)?
+let operation   = ['0'-'9' '+' '-' '*' '/' '(' ')']+
 
 rule main = parse
   | "="                         {incr_bol lexbuf 1; EQUAL}
+  | "CONST"     | "Const"       {incr_bol lexbuf 5; CONST}
   | "IF"        | "If"	        {incr_bol lexbuf 2 ; IF}
   | "FOR"       | "For"	        {incr_bol lexbuf 3 ; FOR}
   | "TO"        | "To"	        {incr_bol lexbuf 2 ; TO}
@@ -55,5 +54,8 @@ rule main = parse
   | identifier as str           {incr_bol_lxm lexbuf str; IDENTIFIER str}
   | string as str               {incr_bol_lxm lexbuf str; STRING str}
   | number as str               {incr_bol_lxm lexbuf str; NUMBER str}
+  
+  | operation as str            {incr_bol_lxm lexbuf str; OPERATION str}
+
   
   | _ as c                      {Error.error ("Unrecognized character " ^ (string_of_char c)) lexbuf.lex_curr_p}
