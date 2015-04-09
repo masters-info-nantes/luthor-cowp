@@ -5,6 +5,7 @@
 
 %token <string> IDENTIFIER
 %token <string> NUMBER
+%token <string> COMPARATOR
 %token EOL
 %token AS
 %token TYPE_INTEGER
@@ -14,12 +15,16 @@
 %token EOF
 %token DIM
 %token IF
+%token DO
+%token LOOP
+%token WHILE
 %token END
 %token EQUAL
-%token GTHAN
-%token LTHAN
 %token THEN
 %token ELSE
+%token FOR
+%token TO
+%token NEXT
 %token <char> CHAR
 %start main
 %type <unit> main
@@ -39,6 +44,16 @@ expressions:
   | expressions affectations{}
   | expressions print_expr{}
   | expressions condition{}
+  | expressions loop{}
+;
+
+loop:
+    | expressions FOR IDENTIFIER EQUAL NUMBER TO NUMBER{print_string "for(int ";print_string $3;print_string "=";print_string $5;print_string ";";print_string $3;print_string "<";print_string $7;print_string ";";print_string $3;print_string "++){"}
+    | expressions NEXT { print_string "}"}
+    | expressions DO WHILE IDENTIFIER EQUAL NUMBER{print_string "while(";print_string $4;print_string "==";print_string $6;print_string "){"}
+    | expressions DO WHILE IDENTIFIER COMPARATOR NUMBER{print_string "while(";print_string $4;print_string $5;print_string $6;print_string "){"}
+    | expressions DO { print_string "while(1){"}
+    | expressions LOOP { print_string "}"}
 ;
 
 condition:
@@ -51,16 +66,10 @@ predicate:
 	| IDENTIFIER EQUAL STRING {$1 ^ " == " ^ $3}
     
 	| IDENTIFIER EQUAL NUMBER {$1 ^ " == " ^ $3}
-	| IDENTIFIER GTHAN NUMBER {$1 ^ " > " ^ $3}
-	| IDENTIFIER LTHAN NUMBER {$1 ^ " < " ^ $3}
-	| IDENTIFIER GTHAN EQUAL NUMBER {$1 ^ " >= " ^ $4}
-	| IDENTIFIER LTHAN EQUAL NUMBER {$1 ^ " <= " ^ $4}
+	| IDENTIFIER COMPARATOR NUMBER {$1 ^ $2 ^ $3}
     
     | IDENTIFIER EQUAL IDENTIFIER {$1 ^ " == " ^ $3}
-	| IDENTIFIER GTHAN IDENTIFIER {$1 ^ " > " ^ $3}
-	| IDENTIFIER LTHAN IDENTIFIER {$1 ^ " < " ^ $3}
-	| IDENTIFIER GTHAN EQUAL IDENTIFIER {$1 ^ " >= " ^ $4}
-	| IDENTIFIER LTHAN EQUAL IDENTIFIER {$1 ^ " <= " ^ $4}
+	| IDENTIFIER COMPARATOR IDENTIFIER {$1 ^ $2 ^ $3}
 ;
 
 print_expr:

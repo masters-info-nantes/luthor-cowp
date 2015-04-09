@@ -1,6 +1,7 @@
 type token =
   | IDENTIFIER of (string)
   | NUMBER of (string)
+  | COMPARATOR of (string)
   | EOL
   | AS
   | TYPE_INTEGER
@@ -10,12 +11,16 @@ type token =
   | EOF
   | DIM
   | IF
+  | DO
+  | LOOP
+  | WHILE
   | END
   | EQUAL
-  | GTHAN
-  | LTHAN
   | THEN
   | ELSE
+  | FOR
+  | TO
+  | NEXT
   | CHAR of (char)
 
 val main :
