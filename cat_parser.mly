@@ -1,5 +1,6 @@
 %{
 	let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
+    open Definitions
 %}
 
 %token <string> IDENTIFIER
@@ -43,21 +44,31 @@ expressions:
 condition:
 	| expressions IF predicate THEN{print_string "if(";print_string $3;print_string "){"}
 	| expressions END IF{ print_string "}"}
-;	| expressions ELSE condition{print_string " else "}
+	| expressions ELSE IF predicate THEN{print_string " }else if(";print_string $4; print_string "){ "}
+;
 
 predicate:
+	| IDENTIFIER EQUAL STRING {$1 ^ " == " ^ $3}
+    
 	| IDENTIFIER EQUAL NUMBER {$1 ^ " == " ^ $3}
 	| IDENTIFIER GTHAN NUMBER {$1 ^ " > " ^ $3}
 	| IDENTIFIER LTHAN NUMBER {$1 ^ " < " ^ $3}
 	| IDENTIFIER GTHAN EQUAL NUMBER {$1 ^ " >= " ^ $4}
 	| IDENTIFIER LTHAN EQUAL NUMBER {$1 ^ " <= " ^ $4}
+    
+    | IDENTIFIER EQUAL IDENTIFIER {$1 ^ " == " ^ $3}
+	| IDENTIFIER GTHAN IDENTIFIER {$1 ^ " > " ^ $3}
+	| IDENTIFIER LTHAN IDENTIFIER {$1 ^ " < " ^ $3}
+	| IDENTIFIER GTHAN EQUAL IDENTIFIER {$1 ^ " >= " ^ $4}
+	| IDENTIFIER LTHAN EQUAL IDENTIFIER {$1 ^ " <= " ^ $4}
 ;
 
 print_expr:
+  | expressions PRINT IDENTIFIER {print_variable $3}
   | expressions PRINT STRING {print_string "printf(" ;print_string $3;print_string ");"}
 ;
 
 affectations:
-	| expressions DIM IDENTIFIER AS TYPE_STRING {print_string "char* ";print_string $3;print_string ";"}
-	| expressions DIM IDENTIFIER AS TYPE_INTEGER {print_string "int ";print_string $3;print_string ";"}
+	| expressions DIM IDENTIFIER AS TYPE_STRING {print_string "char* ";print_string $3;print_string ";"; add_var $3 "String"}
+	| expressions DIM IDENTIFIER AS TYPE_INTEGER {print_string "int ";print_string $3;print_string ";"; add_var $3 "Integer"}
 ;
