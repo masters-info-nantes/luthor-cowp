@@ -1,0 +1,28 @@
+\section{Expressions Régulières}
+
+La plupart des expressions régulières pour scanner le langage FreeBASIC sont simplement les mots-clés complets du langage, mais certaines expressions régulières un peu plus complexes, le détail de leur fonctionnement est décrit ci-après:
+
+\subsection{identifier} 
+    \begin{verbatim}
+        ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
+    \end{verbatim}
+    
+\subsection{string } 
+    \begin{verbatim}
+        '"' [^'"']* '"'
+    \end{verbatim}
+    
+\subsection{integer } 
+    \begin{verbatim}
+        ['0'-'9']+
+    \end{verbatim}
+    
+\subsection{number }
+\begin{verbatim}
+    integer ('.' integer)?
+\end{verbatim}
+
+\subsection{operation  }
+    \begin{verbatim}
+        ['0'-'9' '+' '-' '*' '/' '(' ')']+
+    \end{verbatim}

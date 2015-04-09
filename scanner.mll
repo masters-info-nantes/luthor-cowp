@@ -36,7 +36,7 @@ rule main = parse
   | "TO"        | "To"	        {incr_bol lexbuf 2 ; TO}
   | "DO"        | "Do"	        {incr_bol lexbuf 2 ; DO}
   | "LOOP"      | "Loop"	    {incr_bol lexbuf 4 ; LOOP}
-  | "WHILE"      | "While"	    {incr_bol lexbuf 5 ; WHILE}
+  | "WHILE"     | "While"	    {incr_bol lexbuf 5 ; WHILE}
   | "NEXT"      | "Next"	    {incr_bol lexbuf 4 ; NEXT}
   | "END"       | "End"	        {incr_bol lexbuf 3 ; END}
   | "THEN"      | "Then"        {incr_bol lexbuf 4 ; THEN}
